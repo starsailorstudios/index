@@ -3,273 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Portal Dashboard</title>
+    <title>Student Portal Hub</title>
     <style>
-        /* Global CSS Theme Variables controlling the entire page frame */
         :root {
             --bg-color: #1e122b;
             --text-color: #e1b3ff;
-            --bar-bg: rgba(40, 25, 55, 0.9);
             --accent: #b366ff;
         }
-
-        body.lofi-purple {
-            --bg-color: #1e122b;
-            --text-color: #e1b3ff;
-            --bar-bg: rgba(40, 25, 55, 0.95);
-            --accent: #b366ff;
-        }
-
-        body.rainy-cafe {
-            --bg-color: #2c221e;
-            --text-color: #f3d1be;
-            --bar-bg: rgba(60, 45, 40, 0.95);
-            --accent: #df9a6c;
-        }
-
-        body.synthwave {
-            --bg-color: #0b1d3a;
-            --text-color: #00ffcc;
-            --bar-bg: rgba(15, 35, 70, 0.95);
-            --accent: #ff007f;
-        }
+        body.lofi-purple { --bg-color: #1e122b; --text-color: #e1b3ff; --accent: #b366ff; }
+        body.rainy-cafe { --bg-color: #2c221e; --text-color: #f3d1be; --accent: #df9a6c; }
+        body.synthwave { --bg-color: #0b1d3a; --text-color: #00ffcc; --accent: #ff007f; }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            margin: 0;
-            padding: 0;
-            overflow: hidden; /* Keeps screen perfectly locked */
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            transition: background-color 0.4s ease, color 0.4s ease;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            margin: 0; padding: 20px;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            min-height: 100vh;
+            transition: all 0.4s ease;
         }
-
-        /* Top HUD Control Dashboard Bar */
-        .hud-bar {
-            background: var(--bar-bg);
-            border-bottom: 2px solid var(--accent);
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-            z-index: 100;
+        .gateway-panel {
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid var(--accent);
+            padding: 30px; border-radius: 16px;
+            text-align: center; max-width: 450px; width: 90%;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-
-        .hud-section { display: flex; align-items: center; gap: 15px; }
-        
-        h1 { margin: 0; font-size: 1.2rem; font-weight: 600; letter-spacing: 0.5px; }
-
-        .timer-display {
-            font-family: monospace;
-            font-weight: bold;
-            font-size: 1.3rem;
-            background: rgba(0,0,0,0.3);
-            padding: 4px 10px;
-            border-radius: 6px;
-            border: 1px solid var(--accent);
-            text-shadow: 0 0 8px var(--accent);
-        }
-
-        /* Action Buttons */
-        button {
-            background: transparent;
-            border: 1.5px solid var(--accent);
-            color: var(--text-color);
-            padding: 6px 14px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: bold;
-            transition: all 0.2s ease;
-        }
-        button:hover {
-            background: var(--accent);
-            color: #000;
-            transform: translateY(-1px);
-        }
-
-        /* Form Inputs */
-        input {
-            background: rgba(255,255,255,0.1);
-            border: 1px solid var(--accent);
-            color: #fff;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            margin-right: 5px;
-        }
-
-        /* Hidden Class Utility */
         .hidden { display: none !important; }
-
-        /* The Main Iframe Container Window hosting your Google Site */
-        .google-site-container {
-            flex-grow: 1;
-            width: 100%;
-            border: none;
-            background: #fff;
+        input {
+            background: rgba(255,255,255,0.1); border: 1px solid var(--accent);
+            color: #fff; padding: 10px 15px; border-radius: 8px;
+            margin: 8px 0; width: 85%; font-size: 1rem;
         }
-
-        /* Registration/Welcome Popup Modal Overlay */
-        .popup-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            backdrop-filter: blur(5px);
+        button {
+            background: transparent; border: 2px solid var(--accent);
+            color: var(--text-color); padding: 10px 20px;
+            border-radius: 25px; cursor: pointer; font-weight: bold;
+            margin-top: 15px; transition: all 0.2s ease;
         }
-
-        .popup-box {
-            background: #1a1a1a;
-            color: #fff;
-            padding: 30px;
-            border-radius: 16px;
-            border: 2px solid #b366ff;
-            text-align: center;
-            max-width: 420px;
-            width: 90%;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-        }
-
-        .highlight-code {
-            font-family: monospace;
-            font-size: 1.3rem;
-            color: #00ffcc;
-            background: #000;
-            padding: 10px;
-            border-radius: 8px;
-            margin: 15px 0;
-            display: block;
-            border: 1px dashed #00ffcc;
-            letter-spacing: 1px;
+        button:hover { background: var(--accent); color: #000; transform: scale(1.03); }
+        .token-card {
+            font-family: monospace; font-size: 1.3rem; color: #00ffcc;
+            background: #000; padding: 10px; border-radius: 6px;
+            margin: 15px 0; border: 1px dashed #00ffcc; display: block;
         }
     </style>
 </head>
 <body class="lofi-purple" id="globalBody">
 
-    <!-- 1. INTRODUCTORY ACCOUNT TOKEN POPUP -->
-    <div id="welcomePopup" class="popup-overlay hidden">
-        <div class="popup-box">
-            <h2>Welcome to the Hub 🎒</h2>
-            <p>Here is your unique registration key token. Copy this to create your permanent profile profile credentials:</p>
-            <span class="highlight-code" id="generatedKey">PORTAL-X9921</span>
-            <p style="font-size: 0.8rem; color: #aaa; margin-bottom: 20px;">Use this token token right now in the menu bar to log in.</p>
-            <button onclick="closePopup()">Got it, let's go!</button>
+    <div class="gateway-panel" id="gatewayBox">
+        <h2>Elite Study Vault Gateway 🎒</h2>
+        <p id="statusPrompt">Initialize your student profile to decrypt the library database.</p>
+        
+        <!-- TOKEN SHOWCASE FOR NEW USERS -->
+        <div id="tokenGate">
+            <p style="font-size: 0.9rem; opacity: 0.8;">Your assigned secure login token:</p>
+            <span class="token-card" id="userToken">PORTAL-X9921</span>
+            <button onclick="advanceToCredentials()">I've Copied the Token</button>
         </div>
-    </div>
 
-    <!-- 2. MASTER HUD INTERACTIVE NAVIGATION CONTROLS BAR -->
-    <div class="hud-bar">
-        <div class="hud-section">
-            <h1 id="portalTitle">Student Hub Vault</h1>
+        <!-- PROFILE SIGNUP STEP -->
+        <div id="profileGate" class="hidden">
+            <input type="text" id="usernameInput" placeholder="Create Username"><br>
+            <input type="password" id="passwordInput" placeholder="Create Password"><br>
             
-            <!-- AUTH FORMS ZONE -->
-            <div id="authArea">
-                <span id="authStep1">
-                    <input type="text" id="authCodeInput" placeholder="Enter Token Key">
-                    <button onclick="validateTokenKey()">Verify Key</button>
-                </span>
-                <span id="authStep2" class="hidden">
-                    <input type="text" id="newUsername" placeholder="Create Username">
-                    <input type="password" id="newPassword" placeholder="Create Password">
-                    <button onclick="completeProfileSignup()">Join Portal</button>
-                </span>
-            </div>
-
-            <!-- UNLOCKED PROFILE THEME TOGGLES -->
-            <div id="themeControls" class="hidden">
-                <button onclick="updateGlobalVibe('lofi-purple')">🔮 Lofi</button>
-                <button onclick="updateGlobalVibe('rainy-cafe')">☕ Cafe</button>
-                <button onclick="updateGlobalVibe('synthwave')">⚡ Neon</button>
-            </div>
-        </div>
-
-        <!-- AUTOMATED BACKGROUND TIMING MODULE -->
-        <div class="hud-section">
-            <div id="pointsCounter">✨ <strong id="xpPoints">0</strong> XP</div>
-            <div class="timer-display" id="clockTracker">00:00</div>
+            <p style="margin-top:15px; font-size:0.9rem;">Choose Initial Workspace Theme:</p>
+            <button onclick="setVibe('lofi-purple')">🔮 Lofi</button>
+            <button onclick="setVibe('rainy-cafe')">☕ Cafe</button>
+            <button onclick="setVibe('synthwave')">⚡ Neon</button>
+            <br>
+            <button onclick="unlockAndRedirect()" style="width: 90%; background: var(--accent); color: #000;">🔓 Unlock Library</button>
         </div>
     </div>
-
-    <!-- 3. INVERTED INJECTION SYSTEM FRAME FOR GOOGLE SITES -->
-    <!-- REPLACE THE URL IN THE SRC BELOW WITH YOUR PUBLIC GOOGLE SITE LINK -->
-    <iframe class="google-site-container" id="siteFrame" src="https://sites.google.com/view/star-sailor-studios/home></iframe>
 
     <script>
-        let focusSeconds = 0;
-        let earnedXp = 0;
-        const validTokensList = ["MATH-GENIE-7721", "PMT-VAULT-4481", "KHAN-ELITE-1102", "UPLEARN-PRO-9952"];
-
+        const tokens = ["MATH-GENIE-7721", "PMT-VAULT-4481", "KHAN-ELITE-1102", "UPLEARN-PRO-9952"];
+        
         window.onload = function() {
-            // Load saved user state from local storage cache
-            const cacheUser = localStorage.getItem('hub_user_profile');
-            const cacheTheme = localStorage.getItem('hub_vibe_theme') || 'lofi-purple';
-            
-            updateGlobalVibe(cacheTheme);
-
-            if (cacheUser) {
-                activateLoggedInState(cacheUser);
+            const activeProfile = localStorage.getItem('active_student');
+            if (activeProfile) {
+                // If already logged in previously, immediately pass them straight to your site!
+                window.location.href = "https://google.com";
             } else {
-                // Issue random registration passkey token
-                const assignedToken = validTokensList[Math.floor(Math.random() * validTokensList.length)];
-                document.getElementById('generatedKey').innerText = assignedToken;
-                document.getElementById('authCodeInput').value = assignedToken;
-                document.getElementById('welcomePopup').classList.remove('hidden');
+                const randomToken = tokens[Math.floor(Math.random() * tokens.length)];
+                document.getElementById('userToken').innerText = randomToken;
             }
-
-            // Run automated clock ticker counter loop every 1 second
-            setInterval(runActiveFocusClock, 1000);
         };
 
-        function closePopup() {
-            document.getElementById('welcomePopup').classList.add('hidden');
+        function advanceToCredentials() {
+            document.getElementById('tokenGate').classList.add('hidden');
+            document.getElementById('profileGate').classList.remove('hidden');
+            document.getElementById('statusPrompt').innerText = "Create permanent account records below.";
         }
 
-        // Clock algorithm ticks up and logs background metadata XP variables
-        function runActiveFocusClock() {
-            focusSeconds++;
-            let mm = Math.floor(focusSeconds / 60).toString().padStart(2, '0');
-            let ss = (focusSeconds % 60).toString().padStart(2, '0');
-            document.getElementById('clockTracker').innerText = `${mm}:${ss}`;
+        function setVibe(className) {
+            document.getElementById('globalBody').className = className;
+            localStorage.setItem('student_vibe', className);
+        }
 
-            // Accumulate 1 point automatically every 5 ticks for immediate confirmation
-            if (focusSeconds % 5 === 0) {
-                earnedXp += 5;
-                document.getElementById('xpPoints').innerText = earnedXp;
-                localStorage.setItem('hub_user_xp', earnedXp);
+        function unlockAndRedirect() {
+            const user = document.getElementById('usernameInput').value.trim();
+            const pass = document.getElementById('passwordInput').value.trim();
+
+            if (!user || !pass) {
+                alert("Please fill out both data fields to establish your profile.");
+                return;
             }
+
+            // Save login credentials safely inside browser memory cache
+            localStorage.setItem('active_student', user);
+            
+            // Instantly send them directly to your public Google Site folder out of the frame cage!
+            window.location.href = "https://google.com";
         }
-
-        // Modifies custom CSS template components variables fluidly down DOM tree node paths
-        function updateGlobalVibe(themeClass) {
-            document.getElementById('globalBody').className = themeClass;
-            localStorage.setItem('hub_vibe_theme', themeClass);
-        }
-
-        function validateTokenKey() {
-            const inputVal = document.getElementById('authCodeInput').value.trim();
-            if (validTokensList.includes(inputVal)) {
-                document.getElementById('authStep1').classList.add('hidden');
-                document.getElementById('authStep2').classList.remove('hidden');
-            } else {
-                alert("Invalid configuration registry key token code. Use: " + validTokensList.join(', '));
-            }
-        }
-
-        function completeProfileSignup() {
-            const uName = document.getElementById('newUsername').value.trim();
-            const pWord = document.getElementById('newPassword').value.trim();
-
-            if (!uName || !pWord) {alert("Registration properties must contain user configuration structures.");
-                                   return;
-                                  }localStorage.setItem('hub_user_profile', uName);
-          activateLoggedInState(uName);
-        }function activateLoggedInState(username) {document.getElementById('portalTitle').innerText = 🏆 Vault: ${username};document.getElementById('authArea').classList.add('hidden');document.getElementById('themeControls').classList.remove('hidden');
-                                                   const loadedXp = localStorage.getItem('hub_user_xp') || 0;earnedXp = parseInt(loadedXp);document.getElementById('xpPoints').innerText = earnedXp;}
+    </script>
+</body>
+</html>
